@@ -69,7 +69,7 @@ module DeadlockRetry
     def check_innodb_status_available
       return unless DeadlockRetry.innodb_status_cmd == nil
 
-      if self.connection.adapter_name == "MySQL"
+      if self.connection.adapter_name == "Mysql2"
         begin
           mysql_version = self.connection.select_rows('show variables like \'version\'')[0][1]
           cmd = if mysql_version < '5.5'
@@ -92,11 +92,11 @@ module DeadlockRetry
       # show innodb status is the only way to get visiblity into why
       # the transaction deadlocked.  log it.
       lines = show_innodb_status
-      logger.warn "INNODB Status follows:"
+      logger.error "INNODB Status follows:"
       NewRelic::Agent.notice_error(ActiveRecord::StatementInvalid,{:custom_params => {:error => "Mysql deadlock",
                                                                                       :innodb_status => lines }})
       lines.each_line do |line|
-        logger.warn line
+        logger.error line
       end
     rescue => e
       # Access denied, ignore
