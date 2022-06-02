@@ -25,7 +25,7 @@ module DeadlockRetry
     def transaction_with_deadlock_handling(*objects, &block)
       retry_count = 0
 
-      check_innodb_status_available
+      #check_innodb_status_available
 
       begin
         transaction_without_deadlock_handling(*objects, &block)
@@ -35,7 +35,7 @@ module DeadlockRetry
           raise if retry_count >= MAXIMUM_RETRIES_ON_DEADLOCK
           retry_count += 1
           logger.info "Deadlock detected on retry #{retry_count}, restarting transaction"
-          log_innodb_status if DeadlockRetry.innodb_status_cmd
+          #log_innodb_status if DeadlockRetry.innodb_status_cmd
           exponential_pause(retry_count)
           retry
         else
