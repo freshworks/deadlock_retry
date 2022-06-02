@@ -92,11 +92,11 @@ class DeadlockRetryTest < Test::Unit::TestCase
     assert ActiveRecord::Base.respond_to?(:transaction_with_deadlock_handling)
   end
 
-  def test_innodb_status_availability
-    DeadlockRetry.innodb_status_cmd = nil
-    MockModel.transaction {}
-    assert_equal "show innodb status", DeadlockRetry.innodb_status_cmd
-  end
+  # def test_innodb_status_availability
+  #   DeadlockRetry.innodb_status_cmd = nil
+  #   MockModel.transaction {}
+  #   assert_equal "show innodb status", DeadlockRetry.innodb_status_cmd
+  # end
 
 
   def test_error_in_nested_transaction_should_retry_outermost_transaction
