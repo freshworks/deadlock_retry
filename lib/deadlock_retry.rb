@@ -10,18 +10,18 @@ module DeadlockRetry
       super(requires_new: requires_new, isolation: isolation, joinable: joinable, &block)
     rescue ActiveRecord::LockWaitTimeout, ActiveRecord::Deadlocked => e
       if in_nested_transaction?
-        logger.info { "Deadlock detected in a nested transaction, not retrying. [#{e.class}]" }
+        logger.info { "Deadlock detected in a nested transaction, not retrying." }
         raise
       end
 
       if retry_count >= MAXIMUM_RETRIES_ON_DEADLOCK
-        logger.info { "Deadlock detected and maximum retries exceeded (maximum: #{MAXIMUM_RETRIES_ON_DEADLOCK}), not retrying. [#{e.class}]" }
+        logger.info { "Deadlock detected and maximum retries exceeded (maximum: #{MAXIMUM_RETRIES_ON_DEADLOCK}), not retrying." }
         raise
       end
 
       retry_count += 1
       pause_seconds = exponential_pause_seconds(retry_count)
-      logger.info { "Deadlock detected on retry #{retry_count}, retrying transaction in #{pause_seconds} seconds. [#{e.class}]" }
+      logger.info { "Deadlock detected on retry #{retry_count}, retrying transaction in #{pause_seconds} seconds." }
       sleep_pause(pause_seconds)
       retry
     end
