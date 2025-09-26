@@ -43,7 +43,7 @@ module DeadlockRetry
 
   def in_nested_transaction?
     # open_transactions was added in 2.2's connection pooling changes.
-    connection.open_transactions != 0
+    open_transactions != 0
   end
 
 end
