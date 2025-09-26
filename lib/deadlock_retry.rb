@@ -48,4 +48,4 @@ module DeadlockRetry
 
 end
 
-ActiveRecord::Base.singleton_class.send(:prepend, DeadlockRetry) if defined?(ActiveRecord)
+ActiveRecord::ConnectionAdapters::AbstractAdapter.prepend(DeadlockRetry)
