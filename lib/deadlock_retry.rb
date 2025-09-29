@@ -1,7 +1,9 @@
 require 'active_support/core_ext/module/attribute_accessors'
 
 module DeadlockRetry
+
   MAXIMUM_RETRIES_ON_DEADLOCK = 3
+
   DEADLOCK_ERROR_MESSAGES = [
     "Deadlock found when trying to get lock",
     "Lock wait timeout exceeded",
